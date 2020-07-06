@@ -20,8 +20,8 @@
       <div class="tasks-list">
         <p *ngIf="!tasks.length && !isFetching">Você ainda não tem tarefas</p>
         <ul>
-          <div class="task" (click)="onTaskClick(task)" *ngFor="let task of tasks" [ngClass]="{selected: selectedTaskModel && task.id === selectedTaskModel.id, taskdone: task.done_at}">
-            <div class="checkmark" (click)="onCheckmarkClick(task.id)">
+          <div class="task" (click)="onTaskClick(task)" *ngFor="let task of tasks; let i = index" [ngClass]="{selected: selectedTaskModel && task.id === selectedTaskModel.id, taskdone: task.done_at}">
+            <div class="checkmark" (click)="onCheckmarkClick(i, task.id)">
               <img src="assets/check.svg"/>
             </div>
             <li>{{task.name}}</li>

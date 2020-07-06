@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit {
 
   onTaskClick(task: Task) {
     this.selectedTaskModel = task;
-    console.log(this.selectedTaskModel);
     this.isNewTaskSelected = false;
   }
 

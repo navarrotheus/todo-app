@@ -23,7 +23,6 @@ export class ToastMessagesComponent implements OnInit {
   }
 
   removeToast(id: string) {
-    console.log(id);
     this.toastsService.removeToast(id);
   }
 
