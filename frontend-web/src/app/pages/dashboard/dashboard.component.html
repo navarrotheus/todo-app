@@ -27,6 +27,7 @@
             <li>{{task.name}}</li>
           </div>
         </ul>
+        <app-loading-spinner class="creating-task-loading" *ngIf="isCreatingTask"></app-loading-spinner>
       </div>
     </div>
     <div class="display-task-wrapper" *ngIf="selectedTaskModel">

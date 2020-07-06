@@ -19,6 +19,8 @@ export class DashboardComponent implements OnInit {
   isNewTaskSelected = true;
   selectedTaskModel: Task | null = null;
   isFetching = false;
+  isCreatingTask = false;
+  isLoadingTasks = false;
 
   constructor(
     private http: HttpClient,
@@ -71,14 +73,19 @@ export class DashboardComponent implements OnInit {
       formData.description = undefined;
     }
 
+    this.isCreatingTask = true;
     this.http.post('http://localhost:3333/tasks', formData, {
       headers: new HttpHeaders({ 'Authorization': `Bearer ${this.authService.getToken()}` })
     }).subscribe(data => {
+      this.isCreatingTask = false;
+
       const { id, name, description, done_at } = data as Task;
+
       const newTask = new Task(id, name, description, done_at);
 
       this.tasks.push(newTask);
     }, ({ error }) => {
+      this.isCreatingTask = false;
       this.toastsService.addToast('Erro ao criar tarefa', error.error, 'error');
     });
   }
