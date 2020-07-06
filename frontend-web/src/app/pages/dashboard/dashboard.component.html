@@ -1,0 +1,84 @@
+<div class="dashboard-wrapper">
+  <div class="header">
+    <h1>Minhas tarefas</h1>
+    <div class="user">
+      <p>{{getUsername()}}</p>
+      <div class="logout" (click)="onLogout()">
+        <h3>Sair</h3>
+        <img src="assets/log-out.svg"/>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="tasks">
+      <div class="button plus-icon" [ngClass]="{selected: isNewTaskSelected}" (click)="onNewTaskClick()">
+        <div class="icon">
+          <img src="assets/plus.svg"/>
+        </div>
+        <h3>Nova tarefa</h3>
+      </div>
+      <div class="tasks-list">
+        <p *ngIf="!tasks.length && !isFetching">Você ainda não tem tarefas</p>
+        <ul>
+          <div class="task" (click)="onTaskClick(task)" *ngFor="let task of tasks" [ngClass]="{selected: selectedTaskModel && task.id === selectedTaskModel.id, taskdone: task.done_at}">
+            <div class="checkmark" (click)="onCheckmarkClick(task.id)">
+              <img src="assets/check.svg"/>
+            </div>
+            <li>{{task.name}}</li>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div class="display-task-wrapper" *ngIf="selectedTaskModel">
+      <div class="display-task">
+        <div class="box-1">
+          <h3>{{selectedTaskModel.name}}</h3>
+          <p [ngClass]="{done: selectedTaskModel.done_at}">{{getTaskStatus(selectedTaskModel.done_at)}}</p>
+        </div>
+        <div class="box-2">
+          <h4>Descrição</h4>
+          <p>{{selectedTaskModel.description ? selectedTaskModel.description : 'Essa tarefa ainda não tem descrição'}}</p>
+        </div>
+      </div>
+      <div class="manager-buttons">
+        <div class="button" (click)="onDelete()">
+          <div class="icon">
+            <img src="assets/delete.svg"/>
+          </div>
+          <h3 class="delete">Remover tarefa</h3>
+        </div>
+      </div>
+    </div>
+    <div class="new-task" *ngIf="isNewTaskSelected">
+      <h3>Nova tarefa</h3>
+      <form (ngSubmit)="onSubmitNewTask(f)" #f="ngForm">
+        <div class="input-title">
+          <label for="name">Nome</label >
+          <input
+            type="text"
+            placeholder="Nome da tarefa"
+            id="name"
+            ngModel
+            name="name"
+            required
+            #name="ngModel"
+            [ngClass]="{filled: name.value}"
+          />
+        </div>
+        <div class="input-title input-title-2">
+          <label for="description">Descrição</label >
+          <input
+            type="text"
+            placeholder="Descrição da tarefa"
+            id="description"
+            ngModel
+            name="description"
+            #description="ngModel"
+            [ngClass]="{filled: description.value}"
+          />
+        </div>
+        <button class="submit-form-button submit-button" type="submit" [ngClass]="{disabled: !f.valid}">Enviar</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="container">
+  <div
+    class="toast {{toast.type}}"
+    *ngFor="let toast of toasts"
+    title={{toast.title}}
+    description={{toast.description}}
+    type={{toast.type}}
+  >
+    <img src="{{getSrc(toast.type)}}"/>
+    <div>
+      <strong>{{toast.title}}</strong>
+      <p>{{toast.description}}</p>
+    </div>
+  
+    <button type="button" (click)="removeToast(toast.id)">
+      <img src="{{getCloseSrc(toast.type)}}"/>
+    </button>
+  </div>
+</div>

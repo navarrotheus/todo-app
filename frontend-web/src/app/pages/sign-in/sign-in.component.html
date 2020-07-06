@@ -1,0 +1,42 @@
+<div class="sign-in-container">
+  <div class="sign-in-box">
+    <div class="box-1">
+      <h2>Entrar</h2>
+      <p routerLink="/signup">Não possui uma conta? Cadastre-se</p>
+    </div>
+    <div class="loading" *ngIf="isLoading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm" *ngIf="!isLoading">
+      <div class="box-2">
+        <div class="form">
+          <label for="user">Email / Username</label>
+          <input
+            type="text"
+            id="user"
+            ngModel
+            name="user"
+            required
+            #user="ngModel"
+            [ngClass]="{filled: user.value}"
+            placeholder="Seu email ou username"
+          />
+        </div>
+        <div class="form">
+          <label for="password">Senha</label>
+          <input
+            type="password"
+            id="password"
+            ngModel
+            name="password"
+            required
+            #password="ngModel"
+            [ngClass]="{filled: password.value}"
+            placeholder="Sua senha"
+          />
+        </div>
+      </div>
+      <button type="submit" [ngClass]="{disabled: !f.valid}" class="sign-in-button submit-button">Enviar</button>
+    </form>
+  </div>
+</div>

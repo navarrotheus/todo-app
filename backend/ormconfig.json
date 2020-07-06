@@ -1,0 +1,22 @@
+{
+  "type": "postgres",
+  "host": "ec2-3-216-129-140.compute-1.amazonaws.com",
+  "port": "5432",
+  "username": "xzrohuujuwmzyc",
+  "password": "4e09f5448464e198d07a309928760f15066c20216d9a94ab5572b91ed696e6ec",
+  "database": "ddsae1egjm34j1",
+  "entities": [
+    "./src/models/*.ts"
+  ],
+  "extra": {
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  },
+  "migrations": [
+    "./src/database/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/database/migrations"
+  }
+}

@@ -1,0 +1,71 @@
+<div class="sign-in-container">
+  <div class="sign-in-box">
+    <div class="box-1">
+      <h2>Cadastrar</h2>
+      <p routerLink="/">Já possui uma conta? Faça login</p>
+    </div>
+    <div class="loading" *ngIf="isLoading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm" *ngIf="!isLoading">
+      <div class="box-2">
+          <div class="form">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              placeholder="exemplo@email.com"
+              id="email"
+              ngModel
+              name="email"
+              required
+              email
+              #email="ngModel"
+              [ngClass]="{filled: email.value}"
+            />
+          </div>
+          <div class="form">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              placeholder="Seu username"
+              id="username"
+              ngModel
+              name="username"
+              required
+              #username="ngModel"
+              [ngClass]="{filled: username.value}"
+            />
+          </div>
+          <div class="form">
+            <label for="password">Senha</label>
+            <input 
+              type="password"
+              placeholder="Sua senha"
+              id="password"
+              ngModel
+              name="password"
+              required
+              #password="ngModel"
+              [ngClass]="{filled: password.value}"
+            />
+            <div class="space"></div>
+            <div class="span-wrapper">
+              <input
+              class="confirm-password"
+              type="password"
+              placeholder="Confirme sua senha"
+              id="confirm_password"
+              ngModel
+              name="confirm_password"
+              required
+              #confirmPassword="ngModel"
+              [ngClass]="{filled: confirmPassword.value, invalid: confirmPassword.touched && password.value !== confirmPassword.value}"
+              />
+              <span [ngClass]="{visible: confirmPassword.touched && password.value !== confirmPassword.value}">Senhas não coincidem</span>
+            </div>
+          </div>
+      </div>
+      <button type="submit" [ngClass]="{disabled: !f.valid}" class="sign-in-button submit-button">Enviar</button>
+    </form>
+  </div>
+</div>
