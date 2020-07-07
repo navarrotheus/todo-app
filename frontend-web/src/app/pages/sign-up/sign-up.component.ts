@@ -11,9 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SignUpComponent implements OnInit {
   @ViewChild('f') signUpForm: NgForm;
 
-  isLoading = false;
-
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -25,7 +23,7 @@ export class SignUpComponent implements OnInit {
 
     const { value: formData } = this.signUpForm;
 
-    this.authService.signUp(formData, this.isLoading);
+    this.authService.signUp(formData);
   }
 
 }

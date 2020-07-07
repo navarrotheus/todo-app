@@ -4,10 +4,7 @@
       <h2>Cadastrar</h2>
       <p routerLink="/">Já possui uma conta? Faça login</p>
     </div>
-    <div class="loading" *ngIf="isLoading">
-      <app-loading-spinner></app-loading-spinner>
-    </div>
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm" *ngIf="!isLoading">
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
       <div class="box-2">
           <div class="form">
             <label for="email">Email</label>
@@ -65,6 +62,7 @@
             </div>
           </div>
       </div>
+      <app-loading-spinner creating="true" class="sign-up-spinner" *ngIf="this.authService.isLoading"></app-loading-spinner>
       <button type="submit" [ngClass]="{disabled: !f.valid}" class="sign-in-button submit-button">Enviar</button>
     </form>
   </div>

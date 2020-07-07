@@ -12,9 +12,7 @@ import { Router } from '@angular/router';
 export class SignInComponent implements OnInit {
   @ViewChild('f') signInForm: NgForm;
 
-  isLoading = false;
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.authService.getToken() && this.router.navigate(['/dashboard']);
@@ -35,7 +33,7 @@ export class SignInComponent implements OnInit {
 
     delete formData.user;
 
-    this.authService.signIn(formData, this.isLoading);
+    this.authService.signIn(formData);
   }
 
 }

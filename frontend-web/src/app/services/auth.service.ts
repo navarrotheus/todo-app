@@ -38,6 +38,8 @@ interface ISignInResponseData {
 
 @Injectable()
 export class AuthService {
+  isLoading = false;
+
   constructor(
     private http: HttpClient,
     private toastsService: ToastsService,
@@ -56,34 +58,34 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  signUp(bodyData: ISignUpBodyData, isLoading: boolean) {
-    isLoading = true;
-    this.http.post<ISignUpResponseData>(
+  signUp(bodyData: ISignUpBodyData) {
+    this.isLoading = true;
+    this.http.post(
       'http://localhost:3333/users',
       bodyData
     ).subscribe(() => {
-      isLoading = false;
+      this.isLoading = false;
       this.toastsService.addToast('Conta criada com sucesso', 'Você já pode realizar login', 'sucess');
       this.router.navigate(['/']);
     }, ({ error }) => {
-      isLoading = false;
+      this.isLoading = false;
       this.toastsService.addToast('Erro ao criar conta', error.error, 'error');
     });
   }
 
-  signIn(bodyData: ISignInBodyData, isLoading: boolean) {
-    isLoading = true;
+  signIn(bodyData: ISignInBodyData) {
+    this.isLoading = true;
     this.http.post(
       'http://localhost:3333/sessions',
       bodyData
     ).subscribe(({ token, user }: ISignInResponseData) => {
-      isLoading = false;
+      this.isLoading = false;
       localStorage.setItem('@ToDoApp:token', token);
       localStorage.setItem('@ToDoApp:username', user.username);
       this.toastsService.addToast('Sucesso ao realizar login', 'Você já pode gerenciar suas tarefas!', 'sucess');
       this.router.navigate(['/dashboard']);
     }, ({ error }) => {
-      isLoading = false;
+      this.isLoading = false;
       this.toastsService.addToast('Erro ao realizar login', error.error, 'error');
     });
   }

@@ -72,10 +72,17 @@
 }
 
 form {
+  position: relative;
   display: flex;
   flex-direction: column;
   .sign-in-button {
     align-self: flex-end;
+  }
+
+  .sign-up-spinner {
+    position: absolute;
+    left: 32px;
+    bottom: 25px;
   }
 }
 
