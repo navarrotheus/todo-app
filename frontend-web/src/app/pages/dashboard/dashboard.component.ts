@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 
 import Task from '../../models/Task';
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,11 +17,11 @@ import Task from '../../models/Task';
 export class DashboardComponent implements OnInit {
   @ViewChild('f') newTaskForm: NgForm;
   tasks: Task[] = [];
-  isNewTaskSelected = true;
+  isNewTaskSelected = false;
   selectedTaskModel: Task | null = null;
   isFetching = false;
   isCreatingTask = false;
-  isLoadingTasks = false;
+  isDeletingTask = false;
 
   constructor(
     private http: HttpClient,
@@ -37,12 +38,13 @@ export class DashboardComponent implements OnInit {
       this.isFetching = false;
       this.tasks = data as Task[];
     }, ({ error }) => {
+      this.isFetching = false;
       this.toastsService.addToast('Erro ao carregar tarefas', error.error, 'error');
     });
   }
 
   onNewTaskClick() {
-    this.isNewTaskSelected = true;
+    this.isNewTaskSelected = !this.isNewTaskSelected;
     this.selectedTaskModel = null;
   }
 
@@ -52,12 +54,19 @@ export class DashboardComponent implements OnInit {
   }
 
   onCheckmarkClick(i: number, task_id: string) {
+    this.tasks[i].isUpdatingStatus = true;
     this.http.patch(`http://localhost:3333/tasks/${task_id}`, null, {
       headers: new HttpHeaders({ 'Authorization': `Bearer ${this.authService.getToken()}` })
     }).subscribe((data) => {
       const { done_at } = data as Task;
+
+      this.tasks[i].isUpdatingStatus = false;
+
       this.tasks[i].done_at = done_at;
+
+      this.toastsService.addToast('Sucesso ao atualizar tarefa', '', 'sucess');
     }, ({ error }) => {
+      this.tasks[i].isUpdatingStatus = false;
       this.toastsService.addToast('Erro ao atualizar tarefa', error.error, 'error');
     });
   }
@@ -81,24 +90,34 @@ export class DashboardComponent implements OnInit {
 
       const { id, name, description, done_at } = data as Task;
 
-      const newTask = new Task(id, name, description, done_at);
+      const newTask = new Task(id, name, description, done_at, false);
 
       this.tasks.push(newTask);
+
+      this.toastsService.addToast('Sucesso ao criar tarefa', '', 'sucess');
     }, ({ error }) => {
       this.isCreatingTask = false;
       this.toastsService.addToast('Erro ao criar tarefa', error.error, 'error');
     });
   }
 
-  onDelete() {
+  onDelete(task_id: string) {
+    const taskIndex = this.tasks.findIndex(task => task.id === task_id);
+
+    this.tasks[taskIndex].isUpdatingStatus = true;
+
     this.http.delete(`http://localhost:3333/tasks/${this.selectedTaskModel.id}`, {
       headers: new HttpHeaders({ 'Authorization': `Bearer ${this.authService.getToken()}` })
     }).subscribe(() => {
       const taskIndex = this.tasks.findIndex(task => task.id === this.selectedTaskModel.id);
+
       this.tasks.splice(taskIndex, 1);
-      this.selectedTaskModel = null;
-      this.isNewTaskSelected = true;
+
+      this.tasks.length ? this.selectedTaskModel = this.tasks[0] : this.selectedTaskModel = null;
+
+      this.toastsService.addToast('Sucesso ao deletar tarefa', '', 'sucess');
     }, ({ error }) => {
+      this.tasks[taskIndex].isUpdatingStatus = false;
       this.toastsService.addToast('Erro ao deletar tarefa', error.error, 'error');
     });
   }

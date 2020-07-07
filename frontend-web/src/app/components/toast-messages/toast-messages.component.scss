@@ -6,6 +6,10 @@
   overflow: hidden;
 
   .toast {
+    &.nodescription {
+      align-items: center;
+    }
+
     margin-bottom: 16px;
     
     width: 300px;

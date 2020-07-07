@@ -11,6 +11,7 @@
   </div>
   <div class="box">
     <div class="tasks">
+      <app-loading-spinner creating="true" class="creating-spinner" *ngIf="isCreatingTask"></app-loading-spinner>
       <div class="button plus-icon" [ngClass]="{selected: isNewTaskSelected}" (click)="onNewTaskClick()">
         <div class="icon">
           <img src="assets/plus.svg"/>
@@ -18,16 +19,17 @@
         <h3>Nova tarefa</h3>
       </div>
       <div class="tasks-list">
-        <p *ngIf="!tasks.length && !isFetching">Você ainda não tem tarefas</p>
+        <app-loading-spinner class="fetching-spinner" *ngIf="isFetching"></app-loading-spinner>
+        <p *ngIf="!tasks.length && !isFetching && !isCreatingTask">Você ainda não tem tarefas</p>
         <ul>
           <div class="task" (click)="onTaskClick(task)" *ngFor="let task of tasks; let i = index" [ngClass]="{selected: selectedTaskModel && task.id === selectedTaskModel.id, taskdone: task.done_at}">
             <div class="checkmark" (click)="onCheckmarkClick(i, task.id)">
               <img src="assets/check.svg"/>
             </div>
             <li>{{task.name}}</li>
+            <app-loading-spinner isCheckmark="true" class="checkmark-loader" *ngIf="task.isUpdatingStatus"></app-loading-spinner>
           </div>
         </ul>
-        <app-loading-spinner class="creating-task-loading" *ngIf="isCreatingTask"></app-loading-spinner>
       </div>
     </div>
     <div class="display-task-wrapper" *ngIf="selectedTaskModel">
@@ -42,7 +44,7 @@
         </div>
       </div>
       <div class="manager-buttons">
-        <div class="button" (click)="onDelete()">
+        <div class="button" (click)="onDelete(selectedTaskModel.id)">
           <div class="icon">
             <img src="assets/delete.svg"/>
           </div>

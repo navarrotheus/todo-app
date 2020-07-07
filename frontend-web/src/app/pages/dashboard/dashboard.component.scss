@@ -43,9 +43,16 @@
 }
 
 .tasks {
+  position: relative;
 
   .plus-icon {
     align-self: center;
+  }
+
+  .creating-spinner {
+    position: absolute;
+    top: 58px;
+    left: 70px;
   }
 
   display: flex;
@@ -77,15 +84,19 @@
 
   }
 
-  .creating-task-loading {
+  .fetching-spinner {
     align-self: center;
-    margin-top: 42px;
+    margin: 110px 0 50px 0;
   }
 }
 
 .task {
   &:hover {
     background: #EEEEEE;
+  }
+
+  p {
+    justify-self: flex-end;
   }
     
   background: #FFFFFF;
@@ -103,6 +114,7 @@
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 
   .checkmark {
     margin: 0px 12px;
@@ -120,7 +132,11 @@
       height: 12px;
       visibility: hidden;
     }
+  }
 
+  .checkmark-loader {
+    margin-left: auto;
+    margin-right: 28px;
   }
 
   li {

@@ -5,6 +5,7 @@
     title={{toast.title}}
     description={{toast.description}}
     type={{toast.type}}
+    [ngClass]="{nodescription: !toast.description}"
   >
     <img src="{{getSrc(toast.type)}}"/>
     <div>
