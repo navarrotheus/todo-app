@@ -16,12 +16,18 @@ import Task from '../../models/Task';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('f') newTaskForm: NgForm;
+  @ViewChild('updateform') updateTaskForm: NgForm;
+
   tasks: Task[] = [];
+
   isNewTaskSelected = false;
-  selectedTaskModel: Task | null = null;
+  isUpdateTaskSelected = false;
+  
   isFetching = false;
+  
   isCreatingTask = false;
-  isDeletingTask = false;
+  
+  selectedTaskModel: Task | null = null;
 
   constructor(
     private http: HttpClient,
@@ -45,12 +51,14 @@ export class DashboardComponent implements OnInit {
 
   onNewTaskClick() {
     this.isNewTaskSelected = !this.isNewTaskSelected;
+    this.isUpdateTaskSelected = false;
     this.selectedTaskModel = null;
   }
 
   onTaskClick(task: Task) {
     this.selectedTaskModel = task;
     this.isNewTaskSelected = false;
+    this.isUpdateTaskSelected = false;
   }
 
   onCheckmarkClick(i: number, task_id: string) {
@@ -102,6 +110,8 @@ export class DashboardComponent implements OnInit {
   }
 
   onDelete(task_id: string) {
+    this.isUpdateTaskSelected = false;
+    
     const taskIndex = this.tasks.findIndex(task => task.id === task_id);
 
     this.tasks[taskIndex].isUpdatingStatus = true;
@@ -125,6 +135,53 @@ export class DashboardComponent implements OnInit {
   onLogout() {
     this.authService.signOut();
     this.router.navigate(['/']);
+  }
+
+  onSubmitUpdateTask(form: NgForm, task_id: string) {
+    if (!form.valid) {
+      return;
+    }
+
+    const { value: formData } = this.updateTaskForm;
+
+    if (!formData.description) {
+      delete formData.description;
+    }
+
+    if (!formData.name) {
+      delete formData.name;
+    }
+
+    const taskIndex = this.tasks.findIndex(task => task.id === task_id);
+
+    this.tasks[taskIndex].isUpdatingStatus = true;
+
+    this.http.put(`http://localhost:3333/tasks/${task_id}`, formData, {
+      headers: new HttpHeaders({ 'Authorization': `Bearer ${this.authService.getToken()}` })
+    }).subscribe(data => {
+      this.tasks[taskIndex].isUpdatingStatus = false;
+
+      const { name, description } = data as Task;
+
+      if (name) {
+        this.tasks[taskIndex].name = name;
+      }
+  
+      if (description) {
+        this.tasks[taskIndex].description = description;
+      }
+
+      this.isUpdateTaskSelected = false;
+
+      this.toastsService.addToast('Sucesso ao atualizar a tarefa', '', 'sucess');
+    }, ({ error }) => {
+      this.tasks[taskIndex].isUpdatingStatus = false;
+      this.toastsService.addToast('Erro ao atualizar a tarefa', error.error, 'error');
+    });
+  }
+
+  onUpdateTaskClick() {
+    this.isUpdateTaskSelected = !this.isUpdateTaskSelected;
   }
 
   getTaskStatus(date: string) {

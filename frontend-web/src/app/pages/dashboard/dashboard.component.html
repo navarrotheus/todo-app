@@ -11,7 +11,7 @@
   </div>
   <div class="box">
     <div class="tasks">
-      <app-loading-spinner creating="true" class="creating-spinner" *ngIf="isCreatingTask"></app-loading-spinner>
+      <app-loading-spinner class="creating-spinner" *ngIf="isCreatingTask"></app-loading-spinner>
       <div class="button plus-icon" [ngClass]="{selected: isNewTaskSelected}" (click)="onNewTaskClick()">
         <div class="icon">
           <img src="assets/plus.svg"/>
@@ -27,14 +27,14 @@
               <img src="assets/check.svg"/>
             </div>
             <li>{{task.name}}</li>
-            <app-loading-spinner isCheckmark="true" class="checkmark-loader" *ngIf="task.isUpdatingStatus"></app-loading-spinner>
+            <app-loading-spinner class="checkmark-loader" *ngIf="task.isUpdatingStatus"></app-loading-spinner>
           </div>
         </ul>
       </div>
     </div>
     <div class="display-task-wrapper" *ngIf="selectedTaskModel">
-      <div class="display-task">
-        <div class="box-1">
+      <div class="display-task" *ngIf="!isUpdateTaskSelected">
+        <div class="box-1 display">
           <h3>{{selectedTaskModel.name}}</h3>
           <p [ngClass]="{done: selectedTaskModel.done_at}">{{getTaskStatus(selectedTaskModel.done_at)}}</p>
         </div>
@@ -43,12 +43,43 @@
           <p>{{selectedTaskModel.description ? selectedTaskModel.description : 'Essa tarefa ainda não tem descrição'}}</p>
         </div>
       </div>
+      <div class="display-update-task" *ngIf="isUpdateTaskSelected">
+        <form (ngSubmit)="onSubmitUpdateTask(updateform, selectedTaskModel.id)" #updateform="ngForm">
+          <label for="name">Nome</label>
+          <input
+            type="text"
+            id="name"
+            ngModel
+            name="name"
+            #name="ngModel"
+            [ngClass]="{filled: name.value}"
+            placeholder="Novo nome da tarefa"
+          />
+          <label for="description">Descrição</label>
+          <input
+            type="description"
+            id="description"
+            ngModel
+            name="description"
+            #description="ngModel"
+            [ngClass]="{filled: description.value}"
+            placeholder="Nova descrição da tarefa"
+          />
+          <button type="submit" [ngClass]="{disabled: !description.value && !name.value}" class="submit-button">Atualizar</button>
+        </form>
+      </div>
       <div class="manager-buttons">
+        <div class="button" [ngClass]="{selected: isUpdateTaskSelected}" (click)="onUpdateTaskClick()">
+          <div class="icon">
+            <img src="assets/edit.svg"/>
+          </div>
+          <h3>Editar tarefa</h3>
+        </div>
         <div class="button" (click)="onDelete(selectedTaskModel.id)">
           <div class="icon">
             <img src="assets/delete.svg"/>
           </div>
-          <h3 class="delete">Remover tarefa</h3>
+          <h3>Remover tarefa</h3>
         </div>
       </div>
     </div>
@@ -63,7 +94,6 @@
             id="name"
             ngModel
             name="name"
-            required
             #name="ngModel"
             [ngClass]="{filled: name.value}"
           />

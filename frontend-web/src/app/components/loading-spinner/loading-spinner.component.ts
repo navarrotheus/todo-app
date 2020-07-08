@@ -6,9 +6,6 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./loading-spinner.component.css']
 })
 export class LoadingSpinnerComponent implements OnInit {
-  @Input() isCheckmark: boolean = false;
-  @Input() creating: boolean = false;
-
   constructor() { }
 
   ngOnInit(): void {
