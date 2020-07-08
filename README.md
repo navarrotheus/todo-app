@@ -5,7 +5,7 @@
 
 ## Demo :rocket:
 
-<img alt="demo" src="https://media.giphy.com/media/U5aXoMIIRpvAsh0zX1/source.gif" width="650px" />
+<img alt="demo" src="https://media.giphy.com/media/U5aXoMIIRpvAsh0zX1/source.gif" />
 
 ## Instruções :memo:
 
