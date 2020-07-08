@@ -25,6 +25,12 @@ export default class UpdateTaskService {
       throw new AppError('Permissões inválidas', 401);
     }
 
+    const checkTaskNameExists = await tasksRepository.findOne({ where: { name } });
+
+    if (checkTaskNameExists) {
+      throw new AppError('Tarefa já existe');
+    }
+
     const updatedTask = await tasksRepository.save({ id: task_id, name, description });
 
     return updatedTask;
