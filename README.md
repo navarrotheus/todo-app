@@ -17,7 +17,9 @@
 2. Instale as dependências:
   > ``yarn`` ou ``npm install``
   
-3. Inicie a API:
+3. Crie seu .env com as variávies ambiente do banco, configurações do JWT e definição do ambiente de produção:
+  
+4. Inicie a API:
   > ``yarn dev`` ou ``npm run dev``
   
 <hr />
